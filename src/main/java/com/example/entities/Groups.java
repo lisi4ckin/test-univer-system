@@ -3,6 +3,7 @@ package com.example.entities;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Entity
@@ -36,5 +37,17 @@ public class Groups extends PanacheEntity {
 
     public void setStudentsId(List<Profile> studentsId) {
         this.studentsId = studentsId;
+    }
+
+
+
+    @Transactional
+    public static void addGroup(Groups group){
+        group.persist();
+    }
+
+    @Transactional
+    public static void deleteGroup(Long id){
+        Groups.deleteById(id);
     }
 }
