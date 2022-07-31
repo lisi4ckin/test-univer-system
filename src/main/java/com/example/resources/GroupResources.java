@@ -27,4 +27,18 @@ public class GroupResources {
     public Response getAllGroups(){
         return Response.ok(groupService.getAllGroups()).build();
     }
+
+    @Path("/delete/{id}")
+    @DELETE
+    public Response deleteGroup(@PathParam("id") Long id){
+        groupService.deleteGroup(id);
+        return Response.ok().build();
+    }
+
+    @Path("/update")
+    @PUT
+    public Response updateGroup(Groups group){
+        groupService.updateGroup(group);
+        return Response.ok().build();
+    }
 }

@@ -50,4 +50,10 @@ public class Groups extends PanacheEntity {
     public static void deleteGroup(Long id){
         Groups.deleteById(id);
     }
+
+    @Transactional
+    public static void updateGroup(Groups group){
+        Groups updateGroup = Groups.findById(group.id);
+        updateGroup.persist();
+    }
 }

@@ -19,4 +19,8 @@ public class GroupService {
     public List<Groups> getAllGroups(){
         return Groups.listAll();
     }
+
+    public void updateGroup(Groups group){
+        Groups.updateGroup(group);
+    }
 }
