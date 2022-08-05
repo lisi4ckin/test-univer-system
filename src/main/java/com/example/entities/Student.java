@@ -5,6 +5,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.transaction.Transactional;
 
 @Entity
 public class Student extends PanacheEntity {
@@ -39,5 +40,24 @@ public class Student extends PanacheEntity {
 
     public void setProfileId(Profile profileId) {
         this.profileId = profileId;
+    }
+
+    @Transactional
+    public static void addStudent(Student student){
+        Profile profile = new Profile();
+        profile.persist();
+        student.setProfileId(profile);
+        student.persist();
+    }
+
+    @Transactional
+    public static void deleteStudent(Long id){
+        Student.deleteById(id);
+    }
+
+    @Transactional
+    public static void updateStudent(Student student){
+        Student updateStudent = Student.findById(student.id);
+        updateStudent.persist();
     }
 }
