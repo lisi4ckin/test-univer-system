@@ -2,9 +2,8 @@ package com.example.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Date;
 
 @Entity
@@ -16,6 +15,10 @@ public class Profile extends PanacheEntity {
     private String email;
     private Date dateOfBirthday;
     private Integer years;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Groups group;
@@ -74,5 +77,24 @@ public class Profile extends PanacheEntity {
 
     public void setYears(Integer years) {
         this.years = years;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    @Transactional
+    public static void updateProfile(Profile profile){
+        //update some fields
+        profile.persist();
+    }
+
+    @Transactional
+    public static void deleteProfile(Profile profile){
+        Profile.deleteById(profile.id);
     }
 }
