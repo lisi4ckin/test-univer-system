@@ -32,4 +32,8 @@ public class ProfileService {
         studentService.deleteStudent(students.get(0).id);
         Profile.deleteProfile(profile);
     }
+
+    public void updateProfile(Profile profile){
+        Profile.updateProfile(profile);
+    }
 }
