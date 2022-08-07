@@ -1,0 +1,23 @@
+package com.example.errors;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+
+public class CustomExceptionHandler implements ExceptionMapper<CustomException> {
+    @ConfigProperty(name = "error.usernotfound")
+    String userNotFound;
+
+    @Override
+    public Response toResponse(CustomException e) {
+
+        if (e.getMessage().equalsIgnoreCase(userNotFound)) {
+            return Response.status(Response.Status.NOT_FOUND).
+                    entity(new ErrorMessage(e.getMessage(), false)).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).
+                    entity(new ErrorMessage(e.getMessage(), false)).build();
+        }
+    }
+}

@@ -1,10 +1,10 @@
 package com.example.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 
 @Entity
 public class Student extends PanacheEntity {
@@ -13,7 +13,7 @@ public class Student extends PanacheEntity {
     private String password;
 
     //one to one connection for user Profile
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id")
     private Profile profileId;
 
@@ -30,7 +30,7 @@ public class Student extends PanacheEntity {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = DigestUtils.md5Hex(password);
     }
 
     public Profile getProfileId() {
@@ -39,5 +39,24 @@ public class Student extends PanacheEntity {
 
     public void setProfileId(Profile profileId) {
         this.profileId = profileId;
+    }
+
+    @Transactional
+    public static void addStudent(Student student){
+        Profile profile = new Profile();
+        profile.persist();
+        student.setProfileId(profile);
+        student.persist();
+    }
+
+    @Transactional
+    public static void deleteStudent(Long id){
+        Student.deleteById(id);
+    }
+
+    @Transactional
+    public static void updateStudent(Student student){
+        Student updateStudent = Student.findById(student.id);
+        updateStudent.persist();
     }
 }
